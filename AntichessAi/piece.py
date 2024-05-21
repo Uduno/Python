@@ -11,7 +11,8 @@ class Piece():
     
     def moves(self):
         return [],[]
-    
+    def copy(self):
+        return type(self)(self.name, self.pos_x, self.pos_y, self.id, self.board)
 
 
 class Roi(Piece):

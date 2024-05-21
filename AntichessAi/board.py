@@ -78,7 +78,16 @@ class Board():
                 if moves != [] and moves not in repetitive_moves:
                     second_moves_list.append(moves)
         return second_moves_list
-
+    def get_legal_moves(self, color):
+        pieces_list = self.white_pieces_list if color == "white" else self.black_pieces_list
+        return self.pieceFirstMoves(pieces_list) + self.pieceSecondMoves(pieces_list)
+    def get_winner(self):
+        if self.game_over == "White":
+            return "white"
+        elif self.game_over == "Black":
+            return "black"
+        else:
+            return None
     def makeMove(self, move, color):
         # on sauvegarde l'état des pièces avant le coup
         self.white_pieces_list_history = utils.copier_objet(self.white_pieces_list)
@@ -139,8 +148,8 @@ class Board():
             # print("White Win")
 
 class Board8x8(Board):
-    def __init__(self) -> None:
-        super().__init__(8)
+    def __init__(self, size=8) -> None:
+        super().__init__(size)
         
     
     def initPiece(self):
@@ -180,7 +189,18 @@ class Board8x8(Board):
                       ["__","__","__","__","__","__","__","__"],
                       ["BP","BP","BP","BP","BP","BP","BP","BP"],
                       ["BT","BC","BF","BQ","BK","BF","BC","BT"]]
-        
+    def copy(self):
+        new_board = type(self)(self.size)  # Créer une nouvelle instance de la même classe
+        new_board.board = [row[:] for row in self.board]  # Copier le tableau de jeu
+        new_board.white_pieces_list = [piece.copy() for piece in self.white_pieces_list]  # Copier la liste des pièces blanches
+        new_board.black_pieces_list = [piece.copy() for piece in self.black_pieces_list]  # Copier la liste des pièces noires
+        new_board.white_pieces_list_history = [piece.copy() for piece in self.white_pieces_list_history]  # Copier l'historique des pièces blanches
+        new_board.black_pieces_list_history = [piece.copy() for piece in self.black_pieces_list_history]  # Copier l'historique des pièces noires
+        new_board.moves_history = self.moves_history[:]  # Copier l'historique des mouvements
+        new_board.game_over = self.game_over  # Copier l'état du jeu
+        return new_board
+
+    
 class Board6x6(Board):
     def __init__(self) -> None:
         super().__init__(6)
@@ -219,3 +239,13 @@ class Board6x6(Board):
                       ["__","__","__","__","__","__"],
                       ["BP","BP","BP","BP","BP","BP"],
                       ["BT","BC","BQ","BK","BC","BT"]]
+    def copy(self):
+        new_board = Board(self.size)
+        new_board.board = [row[:] for row in self.board]
+        new_board.white_pieces_list = [piece.copy() for piece in self.white_pieces_list]
+        new_board.black_pieces_list = [piece.copy() for piece in self.black_pieces_list]
+        new_board.white_pieces_list_history = [utils.copier_objet(piece) for piece in self.white_pieces_list_history]
+        new_board.black_pieces_list_history = [utils.copier_objet(piece) for piece in self.black_pieces_list_history]
+        new_board.moves_history = [move for move in self.moves_history]
+        new_board.game_over = self.game_over
+        return new_board
