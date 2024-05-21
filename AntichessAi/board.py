@@ -89,6 +89,7 @@ class Board():
         else:
             return None
     def makeMove(self, move, color):
+        print(move)
         # on sauvegarde l'état des pièces avant le coup
         self.white_pieces_list_history = utils.copier_objet(self.white_pieces_list)
         self.black_pieces_list_history = utils.copier_objet(self.black_pieces_list)

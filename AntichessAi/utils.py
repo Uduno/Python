@@ -1,5 +1,6 @@
 from collections import Counter
 import time 
+import random
 
 # Fonction pour copier récursivement un objet avec ses attributs
 def copier_objet(obj):
@@ -107,3 +108,57 @@ def alphaBeta(board, color, depth, alpha, beta):
             if beta <= alpha:
                 break
         return best_move, mini
+
+class MCTSNode:
+    def __init__(self, board, move=None, parent=None):
+        self.board = board
+        self.move = move
+        self.parent = parent
+        self.children = []
+        self.wins = 0
+        self.visits = 0
+
+def select(node,color):
+    while node.children:
+        node = max(node.children, key=lambda child: uct(child, node.visits))
+    if node.visits == 0:
+        return node
+    else:
+        return expand(node,color)
+
+def expand(node, color):
+    possible_moves = node.board.get_legal_moves(color)
+
+    if not possible_moves:
+        return None  # Aucune possibilité de mouvement trouvée
+
+    for move in possible_moves:
+        new_board = node.board.copy()
+        new_board.makeMove(move, color)
+        child_node = MCTSNode(new_board, move, parent=node)
+        node.children.append(child_node)
+    return random.choice(node.children) if node.children else None
+
+def simulate(node, color):
+    board_copy = node.board.copy()
+    current_color = color
+    while not board_copy.game_over:
+        possible_moves = board_copy.get_legal_moves(current_color)
+        if not possible_moves:
+            break
+        move = random.choice(possible_moves)
+        board_copy.makeMove(move, current_color)
+        current_color = "white" if current_color == "black" else "black"
+    return 1 if board_copy.get_winner() == color else 0
+
+def backpropagate(node, result):
+    while node is not None:
+        node.visits += 1
+        node.wins += result
+        node = node.parent
+
+def uct(node, parent_visits):
+    C = 1.4  # Exploration parameter
+    if node.visits == 0:
+        return float('inf')
+    return node.wins / node.visits + C * (2 * (parent_visits ** 0.5) / node.visits)
