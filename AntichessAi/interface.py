@@ -62,63 +62,69 @@ class chooseAi(Interface):
     def draw(self):
         self.screen.fill(white)
         font = pygame.font.Font("freesansbold.ttf", 36)
+
+        # Titre principal
         text = font.render("Choix Ai", True, black)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size // 2, 50)))
+        self.screen.blit(text, text.get_rect(center=(self.screen_size // 2, 20)))
+
+        # Titres des colonnes
         text = font.render("White", True, black)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size // 4, 100)))
+        self.screen.blit(text, text.get_rect(center=(self.screen_size // 4, 50)))
         text = font.render("Black", True, black)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size - self.screen_size // 4, 100)))
-        text = font.render("Random", True, white if self.white_ai == 1 else black)
-        pygame.draw.rect(self.screen, black , (50, 160, 220, 80),2  if self.white_ai != 1 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size // 4, 200)))
-        text = font.render("Random", True, white if self.black_ai == 1 else black)
-        pygame.draw.rect(self.screen, black , (365, 160, 220, 80),2  if self.black_ai != 1 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size - self.screen_size // 4, 200)))
-        text = font.render("MiniMax", True, white if self.white_ai == 2 else black)
-        pygame.draw.rect(self.screen, black , (50, 260, 220, 80),2  if self.white_ai != 2 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size // 4, 300)))
-        text = font.render("MiniMax", True, white if self.black_ai == 2 else black)
-        pygame.draw.rect(self.screen, black , (365, 260, 220, 80),2  if self.black_ai != 2 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size - self.screen_size // 4, 300)))
-        text = font.render("AlphaBeta", True, white if self.white_ai == 3 else black)
-        pygame.draw.rect(self.screen, black , (50, 360, 220, 80),2  if self.white_ai != 3 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size // 4, 400)))
-        text = font.render("AlphaBeta", True, white if self.black_ai == 3 else black)
-        pygame.draw.rect(self.screen, black , (365, 360, 220, 80),2  if self.black_ai != 3 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size - self.screen_size // 4, 400)))
-        text = font.render("MTCT", True, white if self.white_ai == 4 else black)
-        pygame.draw.rect(self.screen, black , (50, 460, 220, 80),2  if self.white_ai != 4 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size // 4, 500)))
-        text = font.render("MTCT", True, white if self.black_ai == 4 else black)
-        pygame.draw.rect(self.screen, black , (365, 460, 220, 80),2  if self.black_ai != 4 else 0)
-        self.screen.blit(text, text.get_rect(center = (self.screen_size - self.screen_size // 4, 500)))
+        self.screen.blit(text, text.get_rect(center=(self.screen_size - self.screen_size // 4, 50)))
+
+        # Options pour White
+        options = ["Random", "MiniMax", "AlphaBeta", "MTCT", "JOUEUR"]
+        for i, option in enumerate(options):
+            text = font.render(option, True, white if self.white_ai == i + 1 else black)
+            pygame.draw.rect(self.screen, black, (50, 80 + i * 100, 220, 80), 2 if self.white_ai != i + 1 else 0)
+            self.screen.blit(text, text.get_rect(center=(self.screen_size // 4, 120 + i * 100)))
+
+        # Options pour Black
+        for i, option in enumerate(options):
+            text = font.render(option, True, white if self.black_ai == i + 1 else black)
+            pygame.draw.rect(self.screen, black, (365, 80 + i * 100, 220, 80), 2 if self.black_ai != i + 1 else 0)
+            self.screen.blit(text, text.get_rect(center=(self.screen_size - self.screen_size // 4, 120 + i * 100)))
+
+        # Bouton Confirmer
         text = font.render("Confirmer", True, white)
-        pygame.draw.rect(self.screen, black , (210, 560, 220, 80))
-        self.screen.blit(text, text.get_rect(center = (self.screen_size // 2, 600)))
-    
+        pygame.draw.rect(self.screen, black, (self.screen_size // 2 - 110, 580, 220, 80))
+        self.screen.blit(text, text.get_rect(center=(self.screen_size // 2, 620)))
+
     def action(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
-            if 50<= x <= 270 and 160 <= y <= 240:
-                self.white_ai = 1
-            if 50<= x <= 270 and 260 <= y <= 340:
-                self.white_ai = 2
-            if 50<= x <= 270 and 360 <= y <= 440:
-                self.white_ai = 3
-            if 50<= x <= 270 and 460 <= y <= 540:
-                self.white_ai = 4
-            if 365<= x <= 585 and 160 <= y <= 240:
-                self.black_ai = 1
-            if 365<= x <= 585 and 260 <= y <= 340:
-                self.black_ai = 2
-            if 365<= x <= 585 and 360 <= y <= 440:
-                self.black_ai = 3
-            if 365<= x <= 585 and 460 <= y <= 540:
-                self.black_ai = 4
+            # Zones de sélection pour White AI
+            if 50 <= x <= 270:
+                if 80 <= y <= 160:
+                    self.white_ai = 1
+                elif 180 <= y <= 260:
+                    self.white_ai = 2
+                elif 280 <= y <= 360:
+                    self.white_ai = 3
+                elif 380 <= y <= 460:
+                    self.white_ai = 4
+                elif 480 <= y <= 560:
+                    self.white_ai = 5
             
-            if 210 <= x <= 430 and 560 <= y <= 640:
-                if self.black_ai != None and self.white_ai != None:
+            # Zones de sélection pour Black AI
+            if 365 <= x <= 585:
+                if 80 <= y <= 160:
+                    self.black_ai = 1
+                elif 180 <= y <= 260:
+                    self.black_ai = 2
+                elif 280 <= y <= 360:
+                    self.black_ai = 3
+                elif 380 <= y <= 460:
+                    self.black_ai = 4
+                elif 480 <= y <= 560:
+                    self.black_ai = 5
+
+            # Zone pour le bouton Confirmer
+            if self.screen_size // 2 - 110 <= x <= self.screen_size // 2 + 110 and 580 <= y <= 660:
+                if self.black_ai is not None and self.white_ai is not None:
                     return boardGame(self.screen, self.format, self.white_ai, self.black_ai)
+
 
 class boardGame(Interface):
     def __init__(self, screen, format, ai_white, ai_black) -> None:
