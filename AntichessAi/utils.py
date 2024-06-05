@@ -108,7 +108,7 @@ def alphaBeta(board, color, depth, alpha, beta):
             if beta <= alpha:
                 break
         return best_move, mini
-
+# creer un noeud de l'arbre mtct Chaque nœud représente un état du jeu.
 class MCTSNode:
     def __init__(self, board, move=None, parent=None):
         self.board = board
@@ -117,7 +117,7 @@ class MCTSNode:
         self.children = []
         self.wins = 0
         self.visits = 0
-
+#Sélectionne un nœud à explorer en utilisant l'algorithme UCT. Parcourt les nœuds jusqu'à trouver un nœud non visité ou un nœud sans enfants.
 def select(node,color):
     while node.children:
         node = max(node.children, key=lambda child: uct(child, node.visits))
@@ -125,7 +125,7 @@ def select(node,color):
         return node
     else:
         return expand(node,color)
-
+#Étend le nœud en générant tous ses enfants possibles. Crée de nouveaux nœuds pour chaque mouvement légal.
 def expand(node, color):
     possible_moves = node.board.get_legal_moves(color)
 
@@ -138,7 +138,7 @@ def expand(node, color):
         child_node = MCTSNode(new_board, move, parent=node)
         node.children.append(child_node)
     return random.choice(node.children) if node.children else None
-
+# Simule une partie complète de manière aléatoire à partir de ce nœud. Continue jusqu'à la fin de la partie et retourne le résultat.
 def simulate(node, color):
     board_copy = node.board.copy()
     current_color = color
@@ -150,13 +150,13 @@ def simulate(node, color):
         board_copy.makeMove(move, current_color)
         current_color = "white" if current_color == "black" else "black"
     return 1 if board_copy.get_winner() == color else 0
-
+#Propager les résultats d'une simulation jusqu'à la racine de l'arbre.  Met à jour les statistiques de chaque nœud traversé (visites et victoires).
 def backpropagate(node, result):
     while node is not None:
         node.visits += 1
         node.wins += result
         node = node.parent
-
+#    Calculer la valeur UCT pour un nœud.
 def uct(node, parent_visits):
     C = 1.4  # Exploration parameter
     if node.visits == 0:
