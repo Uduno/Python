@@ -43,9 +43,12 @@ def miniMax(board, color, depth):
             copy_board.makeMove(move, color)
             eval = miniMax(copy_board, second_color, depth - 1)
             copy_board.undoMove(color)
+            if eval == 999:
+                return move, eval
             if eval > maxi:
                 maxi = eval
                 best_move = move
+
 
         return best_move, maxi
     else: # pire coup
@@ -89,6 +92,8 @@ def alphaBeta(board, color, depth, alpha, beta):
                 maxi = eval
                 best_move = move
             alpha = max(maxi, alpha)
+            if eval == 999:
+                return move, eval
             if alpha <= beta:
                 break
         return best_move, maxi
@@ -133,14 +138,18 @@ def expand(node, color):
         return None  # Aucune possibilité de mouvement trouvée
 
     for move in possible_moves:
-        new_board = node.board.copy()
+        new_board = copier_objet(node.board)
+        new_board.white_pieces_list = copier_objet(node.board.white_pieces_list)
+        new_board.black_pieces_list = copier_objet(node.board.black_pieces_list)
         new_board.makeMove(move, color)
         child_node = MCTSNode(new_board, move, parent=node)
         node.children.append(child_node)
     return random.choice(node.children) if node.children else None
 # Simule une partie complète de manière aléatoire à partir de ce nœud. Continue jusqu'à la fin de la partie et retourne le résultat.
 def simulate(node, color):
-    board_copy = node.board.copy()
+    board_copy = copier_objet(node.board)
+    board_copy.white_pieces_list = copier_objet(node.board.white_pieces_list)
+    board_copy.black_pieces_list = copier_objet(node.board.black_pieces_list)
     current_color = color
     while not board_copy.game_over:
         possible_moves = board_copy.get_legal_moves(current_color)

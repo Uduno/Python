@@ -1,6 +1,7 @@
 # Plateau de jeu
 import piece as Piece
 import utils
+import sys
 
 class Board():
     def __init__(self, size) -> None:
@@ -89,7 +90,7 @@ class Board():
         else:
             return None
     def makeMove(self, move, color):
-        print(move)
+        # print(move)
         # on sauvegarde l'état des pièces avant le coup
         self.white_pieces_list_history = utils.copier_objet(self.white_pieces_list)
         self.black_pieces_list_history = utils.copier_objet(self.black_pieces_list)
@@ -109,6 +110,7 @@ class Board():
             self.gameOver(color)
         except TypeError:
             print(f'valeur problème de move:{move}')
+            sys.exit(0)
         
     
     def undoMove(self, color):
@@ -121,22 +123,25 @@ class Board():
         list_piece1 = self.white_pieces_list if color == "white" else self.black_pieces_list
         list_piece2 = self.black_pieces_list if color == "white" else self.white_pieces_list
 
-        score_piece_number = 10 if len(list_piece1) < len(list_piece2) else -10 # score positif si le nombre de pièce est inférieur à celui de l'adversaire
-        score_piece_value = 10 if sum([piece.value for piece in list_piece2]) > sum([piece.value for piece in list_piece1]) else -10 # score positif si la valeur totale des pièces est inférieure à celle de l'adversaire
-        score_capture_number = len(self.pieceFirstMoves(list_piece2)) * 5 # plus il y a de capture possible par l'adversaire plus le score est important
+        score_piece_number = 5 if len(list_piece1) < len(list_piece2) else -5 # score positif si le nombre de pièce est inférieur à celui de l'adversaire
+        score_piece_value = 5 if sum([piece.value for piece in list_piece2]) > sum([piece.value for piece in list_piece1]) else -5 # score positif si la valeur totale des pièces est inférieure à celle de l'adversaire
+        score_capture_number = 10 if len(self.pieceFirstMoves(list_piece2)) != 0 else -10 # le score est positif si l'adversaire peut capturer une pièce
 
-        if len(list_piece1) < 8 and self.size == 8 or len(list_piece1) < 6 and self.size == 6 : # l'importance des captures et du nombres de pièces augmentent
+        if len(list_piece1) <= self.size: # l'importance des captures et du nombres de pièces augmentent
             score_capture_number *= 2
             score_piece_number *= 2
-            if any(piece.name in ["BQ", "NQ"] for piece in list_piece1):
-                score_piece_value -= 5
-        elif len(list_piece1) < 4:
+            if any(piece.name in ["BQ", "NQ"] for piece in list_piece1): # la présence de la reine est un désaventage a ce moment 
+                score_piece_value -= 10
+        elif len(list_piece1) < self.size / 2:
             score_capture_number *= 4
             score_piece_number *= 4
+            if any(piece.name in ["BQ", "NQ"] for piece in list_piece1): # la présence de la reine est un désaventage a ce moment 
+                score_piece_value -= 20
         if len(list_piece1) <= 1 and score_capture_number != 0: # suicide move pour gagner
-            return 9999
+            print("suicide!")
+            return 999
         
-        return score_piece_number + score_piece_value + score_capture_number
+        return score_piece_number  + score_piece_value #+ score_capture_number
 
     def gameOver(self, color):
         if (color == "white" and len(self.black_pieces_list) == 0 or 

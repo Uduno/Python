@@ -26,7 +26,7 @@ while running:
         if page.page == 3:
             color = "white" if turn % 2 == 0 else "black"
             color_ai = page.ai_white if color == "white" else page.ai_black
-            move = ai.aiChoose(color_ai, page.board, color)
+            move = ai.aiChoose(color_ai, page.board, color, 1.5)
             page.board.makeMove(move, color)
             #on garde l'historique des coups joués
             page.board.moves_history.append(move)

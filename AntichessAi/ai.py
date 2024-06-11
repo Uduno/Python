@@ -2,7 +2,7 @@ import random
 import utils
 import time
 
-def aiRandom(board, color):
+def aiRandom(board, color, max_time):
     piece_list = board.white_pieces_list if color == "white" else board.black_pieces_list
     list_moves = []
     if board.pieceFirstMoves(piece_list) != []:
@@ -13,10 +13,10 @@ def aiRandom(board, color):
          list_moves = board.pieceSecondMoves(piece_list)
 
     move = list_moves[random.randrange(len(list_moves))]
+    time.sleep(max_time)
     return move
 
-def aiMiniMax(board, color):
-    max_time = 1.5
+def aiMiniMax(board, color, max_time):
     start_time = time.time()
     actual_time = 0
 
@@ -39,8 +39,7 @@ def aiMiniMax(board, color):
     return best_move[random.randrange(len(best_move))] if len(best_move) > 1 else best_move[0]
 
 
-def aiAlphaBeta(board, color):
-    max_time = 1.5
+def aiAlphaBeta(board, color, max_time):
     start_time = time.time()
     actual_time = 0
 
@@ -60,8 +59,7 @@ def aiAlphaBeta(board, color):
 
 
 
-def aiMCTS(board, color):
-    max_time = 1
+def aiMCTS(board, color, max_time):
     start_time = time.time()
     root = utils.MCTSNode(board)
 
@@ -77,15 +75,15 @@ def aiMCTS(board, color):
     return best_child.move
 
 
-def aiChoose(choice, board, color):
+def aiChoose(choice, board, color, max_time):
     match choice:
         case 1:
-            return aiRandom(board, color)
+            return aiRandom(board, color, max_time)
         case 2:
-            return aiMiniMax(board, color)
+            return aiMiniMax(board, color, max_time)
         case 3:
-            return aiAlphaBeta(board, color)
+            return aiAlphaBeta(board, color, max_time)
         case 4:
-            return aiMCTS(board, color)
+            return aiMCTS(board, color, max_time)
         case _:
-            return aiRandom(board, color)
+            return aiRandom(board, color, max_time)
