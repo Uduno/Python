@@ -55,8 +55,8 @@ cd nom-du-repo
 ```bash
 python main.py
 ``` 
-
-## Comment jouer 
+ 
+## Comment jouer 
 
 1. Choisissez la taille de l'échiquier (6x6 ou 8x8).
 2. Sélectionnez le type d'IA que vous souhaitez faire jouer dans l'interface du programme.
