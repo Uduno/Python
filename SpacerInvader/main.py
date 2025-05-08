@@ -9,20 +9,21 @@ pygame.init()
 player = Player()
 player_missile = []
 
-life = pygame.image.load("assets/life.png")
-font = pygame.font.SysFont('assets/minecraft_font.ttf', 15)
+life = pygame.image.load("assets/life.png") # image de coeur
+# font d'ecriture
+font = pygame.font.SysFont('assets/minecraft_font.ttf', 15) 
 font2 = pygame.font.SysFont('assets/minecraft_font.ttf', 40)
 
-ennemies = []
-ennemi_missile = []
-last_shoot = 0
-delai_shoot = 1500 #1.5s
+ennemies = [] # liste d'ennemis
+ennemi_missile = [] # liste des missiles ennemi
+last_shoot = 0 
+delai_shoot = 1500 #1.5s delai de tir
 lines = 3
 cols = 6
 
 actual_speed = e_speed
 
-def invasion(speed):
+def invasion(speed): # fonction de création de vagues ennemi
     for line in range(lines):
         for col in range(cols):
             x = 60 + col * 30
@@ -48,11 +49,13 @@ def main():
         actual_time = pygame.time.get_ticks()
         screen.fill(WHITE)
 
+        # affichage du score
         score_draw = font.render(f'{int(score)}', True, BLACK)
         score_rec = score_draw.get_rect()
         score_rec.topright = (WIDTH - 10, 10)
         screen.blit(score_draw, score_rec)
 
+        # affichage du gameover
         if gameover == True:
            gameover_text1 = font2.render("Game Over", True, BLACK)
            gameover_text2 = font2.render("Press 'Enter'", True, BLACK)
@@ -62,7 +65,7 @@ def main():
            screen.blit(gameover_text2, text2_rect)
 
 
-        
+        # touche de déplacement du joueur
         keys  = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
             player.move_right()
@@ -72,6 +75,7 @@ def main():
         for hp in range(player.hp):
             screen.blit(life,(hp * 20, 7.5))
 
+        # gestion des missiles du joueur
         for missile in player_missile[:]:
             missile.move(-1)
             if missile.rect.bottom < 0:
@@ -88,6 +92,7 @@ def main():
                 invasion(actual_speed)
             missile.draw(screen, BLUE)
 
+        # gestion des ennemis
         for ennemi in ennemies[:]:
             if gameover != True:
                 ennemi.move()
@@ -95,6 +100,7 @@ def main():
                     gameover = True
                 ennemi.draw(screen)
 
+        # gestion des missiles ennemi
         for missile in ennemi_missile[:]:
             missile.move(1)
             if missile.rect.top > HEIGHT:
@@ -107,7 +113,8 @@ def main():
                     gameover = True
                 break
             missile.draw(screen, RED)
-            
+        
+        # gestion du tir d'un missile ennemi
         if actual_time - last_shoot >= delai_shoot and gameover != True:
             index_ennemi = random.randrange(len(ennemies))
             missile_x = ennemies[index_ennemi].rect.centerx - (m_size/2)
@@ -118,11 +125,13 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            # tir du joueur en appuyant sur "espace"
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     missile_x = player.rect.centerx - (m_size/2)
                     missile_y = player.rect.top
                     player_missile.append(Missile(missile_x, missile_y))
+                # relancer le jeu apres un gameover
                 if event.key == pygame.K_RETURN and gameover == True:
                     gameover = False
                     actual_speed = 1
