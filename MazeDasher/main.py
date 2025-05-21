@@ -42,8 +42,7 @@ def main():
         screen.fill(GREEN)
 
 
-        draw_grid()
-        player.draw(screen, level)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -57,6 +56,9 @@ def main():
                 if event.key == pygame.K_DOWN:
                     player.dashing(0, 1, level)
 
+        draw_grid()
+        player.move()
+        player.draw(screen, level)
         
         pygame.display.flip()
 

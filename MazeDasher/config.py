@@ -17,7 +17,8 @@ TILES = {
     "0": "obstacles/obstacle_0.png",
     "1": "obstacles/obstacle_1.png",
     "2": "obstacles/obstacle_2.png",
-    "3": "obstacles/obstacle_3.png" 
+    "3": "obstacles/obstacle_3.png",
+    "X": "collectibles/clef.png"
 }
 TILES_CHAR = ["_", "p", "i", "l", "j", "I", "q", "0", "1", "2", "3"]
 # Couleurs

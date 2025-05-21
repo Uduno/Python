@@ -5,6 +5,9 @@ class Player:
     def __init__(self, pos_x, pos_y):
         self.x = pos_x
         self.y = pos_y
+        self.real_x = pos_x * TILE_SIZE
+        self.real_y = pos_y * TILE_SIZE
+        self.speed = 8
         self.direction = "down"
         self.dash = False
         self.anim_index = 0
@@ -40,16 +43,16 @@ class Player:
         sprite = self.get_rotation()
         mid_rows = (16 - len(level))// 2
         mid_cols = (16 - len(level[0])) // 2
-        x = (self.x + mid_cols) * TILE_SIZE
-        y = (self.y - mid_rows) * TILE_SIZE + WIDTH
-        
+        x = self.real_x + mid_cols * TILE_SIZE
+        y = self.real_y - mid_rows * TILE_SIZE + WIDTH
         screen.blit(sprite, (x , y ))
 
     def dashing(self, x, y, level):
+        if self.dash:
+            return 
         self.dash = True
         self.anim = self.dash_anim
-        direction_map = {(1, 0): "right", (0, 1): "down", (-1, 0): "left", (0, -1): "up"}
-        self.direction = direction_map[(x, y)]
+        self.dash_direction = (x, y)
 
         while True:
             new_x = self.x + x
@@ -59,12 +62,26 @@ class Player:
             self.x = new_x
             self.y = new_y
 
-        self.dash = False
-        self.anim = self.idle_anim
-        self.anim_index = 0
+        direction_map = {(1, 0): "right", (0, 1): "down", (-1, 0): "left", (0, -1): "up"}
+        self.direction = direction_map[(x, y)]
 
     def can_move(self, x, y, level):
-        print(self.x, self.y, x, y)
         if y < 0 or y >= len(level) or x < 0 or x >= len(level[0]):
             return False
         return level[y][x] not in TILES_CHAR
+
+    def move(self):
+        if self.dash:
+            end_x = self.x * TILE_SIZE - self.real_x
+            end_y = self.y * TILE_SIZE - self.real_y
+
+            if abs(end_x) <= self.speed and abs(end_y) <= self.speed:
+                self.real_x = self.x * TILE_SIZE
+                self.real_y = self.y * TILE_SIZE
+                self.anim = self.idle_anim
+                self.anim_index = 0
+                self.dash = False
+                
+            else:
+                self.real_x += self.speed * ( 1 if end_x > 0 else -1 if end_x < 0 else 0 )
+                self.real_y += self.speed * ( 1 if end_y > 0 else -1 if end_y < 0 else 0 )
