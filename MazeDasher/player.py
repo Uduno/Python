@@ -7,7 +7,7 @@ class Player:
         self.y = pos_y
         self.real_x = pos_x * TILE_SIZE
         self.real_y = pos_y * TILE_SIZE
-        self.speed = 8
+        self.speed = 10
         self.direction = "down"
         self.dash = False
         self.transforming = False
@@ -66,12 +66,14 @@ class Player:
         return pygame.transform.rotate(sprite, rotate)
     
     def draw(self, screen, level):
+        
         self.update_anim()
         sprite = self.get_rotation()
         mid_rows = (16 - len(level))// 2
         mid_cols = (16 - len(level[0])) // 2
-        x = self.real_x + mid_cols * TILE_SIZE
-        y = self.real_y - mid_rows * TILE_SIZE + WIDTH
+        x = self.real_x  + mid_cols * TILE_SIZE
+        y = self.real_y  
+        sprite = pygame.transform.scale(sprite, (TILE_SIZE, TILE_SIZE))
         screen.blit(sprite, (x , y ))
 
     def dashing(self, x, y, level):

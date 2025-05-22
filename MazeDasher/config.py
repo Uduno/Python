@@ -1,10 +1,10 @@
 # Variable globale du jeu
 
-WIDTH = 512
-HEIGHT = 700
+WIDTH = 800
+HEIGHT = 800
 
 # Tiles Map
-TILE_SIZE = 32
+TILE_SIZE = 50
 TILES_PATH = "assets/map/"
 TILES = {
     "_": "closures/closure_0.png",
@@ -26,3 +26,4 @@ TILES_CHAR = ["_", "p", "i", "l", "j", "I", "q", "0", "1", "2", "3"]
 ANIMALS = ["cow.png", "chicken.png", "rabbit.png"]
 # Couleurs
 GREEN = (82, 204, 72)
+BLACK = (0, 0, 0)
