@@ -55,6 +55,8 @@ def main():
                     player.dashing(0, -1, level)
                 if event.key == pygame.K_DOWN:
                     player.dashing(0, 1, level)
+                if event.key == pygame.K_SPACE:
+                    player.transformation()
 
         draw_grid()
         player.move()

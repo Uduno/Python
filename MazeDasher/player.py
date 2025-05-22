@@ -1,5 +1,5 @@
 import pygame
-from config import TILE_SIZE, TILES_CHAR, WIDTH
+from config import TILE_SIZE, TILES_CHAR, WIDTH, ANIMALS
 
 class Player:
     def __init__(self, pos_x, pos_y):
@@ -10,12 +10,14 @@ class Player:
         self.speed = 8
         self.direction = "down"
         self.dash = False
+        self.transforming = False
+        self.animal_index = 0
         self.anim_index = 0
         self.time_anim = pygame.time.get_ticks()
         self.anim_delay = 100
-        self.idle_anim = self.load_anim("assets/spritesheets/cow.png", 4)
+        self.idle_anim = self.load_anim(f'assets/spritesheets/{ANIMALS[self.animal_index]}', 4)
         self.dash_anim = self.load_anim("assets/spritesheets/dash.png", 4)
-
+        self.transfo_anim = self.load_anim("assets/spritesheets/transformation.png", 8)
         self.anim = self.idle_anim
 
     def load_anim(self, path, nb_sprite):
@@ -30,9 +32,34 @@ class Player:
     def update_anim(self):
         time_t = pygame.time.get_ticks()
         if time_t - self.time_anim >= self.anim_delay:
-            self.anim_index = (self.anim_index + 1)% len(self.anim)
             self.time_anim = time_t
-    
+
+            if self.anim_index + 1 >= len(self.anim):
+                if self.transforming:
+                    self.finish_transformation()
+                else:
+                    self.anim_index = 0
+            else:
+                self.anim_index += 1
+
+
+
+    def transformation(self):
+        if not self.transforming:
+            self.transforming = True
+            self.anim = self.transfo_anim
+            self.anim_index = 0
+            self.time_anim = pygame.time.get_ticks()
+
+    def finish_transformation(self):
+        self.transforming = False
+        self.animal_index = (self.animal_index + 1) % len(ANIMALS)
+        self.idle_anim = self.load_anim(f'assets/spritesheets/{ANIMALS[self.animal_index]}', 4)
+        self.anim = self.idle_anim
+        self.anim_index = 0
+
+
+
     def get_rotation(self):
         sprite = self.anim[self.anim_index]
         rotate = {"down": 0, "right": 90, "up": 180, "left": -90}[self.direction]
@@ -48,7 +75,7 @@ class Player:
         screen.blit(sprite, (x , y ))
 
     def dashing(self, x, y, level):
-        if self.dash:
+        if self.dash or self.transforming:
             return 
         self.dash = True
         self.anim = self.dash_anim

@@ -21,5 +21,8 @@ TILES = {
     "X": "collectibles/clef.png"
 }
 TILES_CHAR = ["_", "p", "i", "l", "j", "I", "q", "0", "1", "2", "3"]
+
+#Sprites animals
+ANIMALS = ["cow.png", "chicken.png", "rabbit.png"]
 # Couleurs
 GREEN = (82, 204, 72)
