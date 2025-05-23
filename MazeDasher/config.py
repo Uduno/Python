@@ -26,4 +26,6 @@ TILES_CHAR = ["_", "p", "i", "l", "j", "I", "q", "0", "1", "2", "3"]
 ANIMALS = ["cow.png", "chicken.png", "rabbit.png"]
 # Couleurs
 GREEN = (82, 204, 72)
+ORANGE = (255, 87, 51)
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
