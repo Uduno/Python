@@ -24,6 +24,11 @@ TILES_CHAR = ["_", "p", "i", "l", "j", "I", "q", "0", "1", "2", "3"]
 
 #Sprites animals
 ANIMALS = ["cow.png", "chicken.png", "rabbit.png"]
+
+#Levels
+LEVEL =  ["level_01.txt","level_02.txt","level_03.txt",
+          "level_04.txt","level_05.txt","level_06.txt",
+          "level_07.txt","level_08.txt","level_09.txt","level_10.txt"]
 # Couleurs
 GREEN = (82, 204, 72)
 ORANGE = (255, 87, 51)

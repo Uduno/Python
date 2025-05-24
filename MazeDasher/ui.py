@@ -1,5 +1,5 @@
 import pygame
-from config import HEIGHT, WIDTH, WHITE, ORANGE
+from config import HEIGHT, WIDTH, WHITE, ORANGE, BLACK
 
 class Button:
     def __init__(self, text, pos, size, callback, font, color=(WHITE), bg=(ORANGE)):
@@ -19,20 +19,3 @@ class Button:
                 self.callback()
             return True
 
-
-class Popup:
-    def __init__(self, text, buttons, font, size=(400, 200)):
-        self.rect = pygame.Rect((WIDTH // 2 - size[0] // 2, HEIGHT // 2 - size[1] // 2), size)
-        self.text = font.render(text, True, WHITE)
-        self.buttons = buttons
-        self.font = font
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, (ORANGE), self.rect)
-        screen.blit(self.text, (self.rect.centerx - self.text.get_width() // 2, self.rect.top + 20))
-        for btn in self.buttons:
-            btn.draw(screen)
-
-    def handle_event(self, event):
-        for btn in self.buttons:
-            btn.handle_event(event)
