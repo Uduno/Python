@@ -90,11 +90,11 @@ python main.py
 
 ### Map en 8x8
 
-![Map](assets/screenshots/screenshot2.png)
+![Map](assets/screenshots/screenshot3.png)
 
 ### Map en 14x14
 
-![Map](assets/screenshots/screenshot3.png)
+![Map](assets/screenshots/screenshot2.png)
 
 ---
 
