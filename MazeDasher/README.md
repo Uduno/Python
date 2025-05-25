@@ -86,15 +86,15 @@ python main.py
 
 ### Map en 6x6
 
-![Map](assets/screenshots/screenshoot1.png)
+![Map](assets/screenshots/screenshot1.png)
 
 ### Map en 8x8
 
-![Map](assets/screenshots/screenshoot2.png)
+![Map](assets/screenshots/screenshot2.png)
 
 ### Map en 14x14
 
-![Map](assets/screenshots/screenshoot3.png)
+![Map](assets/screenshots/screenshot3.png)
 
 ---
 
